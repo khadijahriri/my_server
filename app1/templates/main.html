@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+    <body>
+    <header>
+        <h1>Welcom {{user_on_template.first_name}}</h1>
+        <div>
+            <form action="/make_a_wish_page" method="POST">
+                {% csrf_token%}
+                <button type="submit" class="small blue button"> Make a Wish </button>
+            </form>
+            <form action="/display_stats" method="POST">
+                {% csrf_token%}
+                <button type="submit" class="small blue button">View Stats</button>
+            </form>
+            <a href="/loging_out">Log Out</a>
+        </div>
+    </header>
+    {% if messages %}
+        <ul class="messages">    
+        {% for message in messages %}    
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+        {% endfor %}
+        </ul>
+        {% endif %}
+    <div id="wrapp">
+        </div>
+        <h2>Your Wish List</h2>
+        <table class="table-fill">
+            <thead>
+            <tr>
+                <th class="text-left">Item</th>
+                <th class="text-left">Date Added</th>
+                <th class="text-left">Action</th>
+                
+            </tr>
+            </thead>
+            {% for wish in user_on_template.pending_wishes.all reversed %}
+            <tbody>
+            <tr>
+                <td class="text-left">{{wish.item}}</td>
+                <td class="text-left">{{wish.created_at}}</td>
+                <td class="text-left">
+                    <a href="/remove_wish/{{wish.id}}">Remove</a> |
+                    <a href="/edit_page/{{wish.id}}">Edit</a> |
+                    <a href="/grant_wish/{{wish.id}}">Granted</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        <h2>Granted wishes</h2>
+        <table class="table-fill">
+            <thead>
+            <tr>
+                <th class="text-left">Item</th>
+                <th class="text-left">Wisher</th>
+                <th class="text-left">Date Added</th>
+                <th class="text-left">Date Granted</th>
+                <th class="text-left">like</th>
+                <th class="text-left">Action</th>
+                
+            </tr>
+            </thead>
+            <tbody >
+            {% for wish in users_granted_wishs_on_template %}
+            <tr>
+                <td class="text-left">{{wish.item}}</td>
+                <td class="text-left">{{wish.wisher.first_name }}  {{wish.wisher.last_name }}</td>
+                <td class="text-left">{{wish.the_time_wish_was_created}}</td>
+                <td class="text-left">{{wish.created_at}}</td>
+                <td class="text-left">{{wish.number_of_likes}}</td>
+                <td class="text-left">
+                    {% if wish.wisher.id != user_on_template.id%}
+                    <a href="/like/{{wish.id}}">like</a> 
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </body>
+</html>

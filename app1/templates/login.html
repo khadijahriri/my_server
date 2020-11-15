@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div id="wrapperm">
+        {% if messages %}
+        <ul class="messages">    
+        {% for message in messages %}    
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+        {% endfor %}
+        </ul>
+        {% endif %}
+        <h1>Welcome! Sign in to make a wish!</h1>
+        <div class="box1">
+        <h1>Registration</h1>
+            <form class="login" action="/registration" method="POST">
+                {% csrf_token%}
+                <label>First Name : </label><br>
+                <input type="text" name='first_name'><br>
+                <label>Last Name: </label><br>
+                <input type="text" name='last_name'><br>
+                <label>Email: </label><br>
+                <input type="text" name='email'><br>
+                <label>Password: </label><br>
+                <input type="password" name='password'><br>
+                <label>Confirm Password: </label><br>
+                <input type="text" name='confirm_password'><br>
+                <button type="submit">Registrer</button>
+            </form>
+        </div>
+        <div class ="box2">
+        <h1>Login</h1>
+            <form class="login" action="/login" method="POST">
+                {% csrf_token%}
+                <label>Email: </label><br>
+                <input type="text" name='email'><br>
+                <label>Password: </label><br>
+                <input type="text" name='password'><br>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
