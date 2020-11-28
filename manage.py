@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# just for syncing cloned project  test hahaha
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
